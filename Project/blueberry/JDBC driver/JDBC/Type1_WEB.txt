@@ -1,0 +1,38 @@
+package view;
+import java.io.IOException;
+import java.sql.*;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet(name = "showdata", urlPatterns = {"/showdata"})
+public class showdata extends HttpServlet 
+{
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException 
+    {
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        String data = "jdbc:odbc:mydsn";//connection string or url
+        try 
+        {
+            Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");//driver
+            Connection conn = DriverManager.getConnection(data,"sa" ,"password@123" );
+            Statement st = conn.createStatement();
+            ResultSet rec = st.executeQuery("SELECT * FROM aa");
+            out.println("<html><body>");
+            out.println("<ol>");
+            while (rec.next()) 
+            {
+                out.println("<li>" + rec.getString(1) + "," + rec.getString(2) + "," + rec.getString(3) + "</li>");
+            }
+            out.println("</ol>");
+            st.close();
+        } catch (Exception e) 
+        {
+              out.println("<p><font color='red'>Error: " + e.toString() + "<br>" + e.getMessage()+"</font></p>");
+        }    
+        out.println("</body></html>");
+    }

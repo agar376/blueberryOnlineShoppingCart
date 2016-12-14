@@ -1,0 +1,28 @@
+public static void main(String[] args) 
+    {
+        String str="select * from aa where name like 'a%'";
+        try
+        {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            Connection con=DriverManager.getConnection("jdbc:sqlserver://del-00201-srvmr\\sql2k5;databaseName=adventureworks;user=sa;password=password@123");
+            Statement stmt=con.createStatement();            
+            ResultSet rs=stmt.executeQuery(str);
+            while (rs.next())
+            {
+                System.out.println(rs.getString(1) + "\t" + rs.getString(2) + "\t\t" + rs.getString(3));
+            }
+            rs.close();
+            stmt.executeUpdate("insert into aa values(14,'AAAAAAA',1)");
+            rs=stmt.executeQuery(str);
+            while (rs.next()) 
+            {
+                System.out.println(rs.getString(1) + "\t" + rs.getString(2) + "\t\t" + rs.getString(3));
+            }
+            rs.close();
+            stmt.close();            
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error : " + e.getMessage());
+        }
+    }
